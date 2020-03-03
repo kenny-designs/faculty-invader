@@ -1,4 +1,8 @@
-# Phaser 3 Webpack Project Template
+# Faculty Invader
+
+This is a Phaser 3 project that aims to recreate the original Space Invaders but with a twist!
+
+## This Project is Based on the Phaser 3 Project Template
 
 A Phaser 3 project template with ES6 support via [Babel 7](https://babeljs.io/) and [Webpack 4](https://webpack.js.org/)
 that includes hot-reloading for development and production-ready builds.
