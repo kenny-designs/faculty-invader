@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import Bullet from './bullet.js';
 
 /**
  * @classdesc
@@ -22,8 +23,25 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // prevent movement from collisions (such as from bullets)
     this.setImmovable(true);
 
+    // setup bullet pool
+    this.bullets = scene.add.group({
+      classType: Bullet,
+      defaultKey: 'bullet',
+      maxSize: 30,
+      runChildUpdate: true
+    });
+
+    this.lastFire = 0;
+
     // Add the player to the scene
     scene.add.existing(this);
+  }
+
+  /**
+   * @override
+   */
+  update(time, delta) {
+    console.log('penis');
   }
 
   /**
@@ -47,6 +65,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    */ 
   moveStop() {
     this.setVelocityX(0);
+  }
+
+  /**
+   * Fire
+   */ 
+  fireBullet() {
+    let bullet = this.bullets.get();
+    if(bullet) {
+      bullet.fireBullet(this.x, this.y, -1000);
+    }
   }
 }
 

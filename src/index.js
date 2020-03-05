@@ -3,7 +3,6 @@ import Phaser from "phaser";
 
 // import custom classes
 import Player from './assets/scripts/player.js';
-import Bullet from './assets/scripts/bullet.js';
 
 // import image assets
 import bulletImg      from './assets/images/bullet.png';
@@ -59,10 +58,6 @@ function create() {
   // create the player
   this.player = new Player(this, 400, 500, 'ship');
 
-  // TODO: remove
-  // create test bullet
-  this.bullet = new Bullet(this, 0, 0, 'bullet');
-
   // set up keyboard input
   // TODO: Create a input controller class to handle all this
   this.cursors = this.input.keyboard.addKeys({
@@ -75,9 +70,10 @@ function create() {
 /**
  * Gameplay loop
  */ 
-function update() {
+function update(time, delta) {
   //  Scroll the background
-  this.background.tilePositionY += 2;
+  //  TODO: see if parallax with ship
+  this.background.tilePositionY -= 100 / delta;
 
   // TODO: refactor into its own function
   // control player movement
@@ -93,6 +89,6 @@ function update() {
 
   // Fire
   if(this.cursors.fire.isDown) {
-    this.bullet.fireBullet(this.player.x, this.player.y, -1000);
+    this.player.fireBullet();
   }
 }
