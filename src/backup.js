@@ -67,12 +67,12 @@ let stateText;
 let livingEnemies = [];
 
 function create() {
-  // TODO: fix physics
-  // game.physics.startSystem(Phaser.Physics.ARCADE);
+  game.physics.startSystem(Phaser.Physics.ARCADE);
 
   //  The scrolling starfield background
   starfield = this.add.tileSprite(0, 0, 800, 600, 'starfield');
 
+  /*
   //  Our bullet group
   // TODO: *set anchor x to 0.5 and y to 1
   //       *out of bounds kill 
@@ -93,14 +93,13 @@ function create() {
       quantity: 30,
       collideWorldBounds: true
     });
+    */
 
   //  The hero!
   player = this.add.sprite(400, 500, 'ship');
-  /*
   player.anchor.setTo(0.5, 0.5);
   game.physics.enable(player, Phaser.Physics.ARCADE);
 
-  /*
   //  The baddies!
   aliens = this.add.group();
   aliens.enableBody = true;
@@ -139,11 +138,9 @@ function create() {
   //  And some controls to play the game with
   cursors = game.input.keyboard.createCursorKeys();
   fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-  */
 }
 
 function createAliens () {
-
   for (var y = 0; y < 4; y++)
   {
     for (var x = 0; x < 10; x++)

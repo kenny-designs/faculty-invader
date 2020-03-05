@@ -15,17 +15,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
 
-    // TODO: Move all code below into methods for separation of concerns
-    // Display and update Player in the given scene
-    scene.sys.displayList.add(this);
-    scene.sys.updateList.add(this);
-
     // Enable physics
     scene.physics.world.enableBody(this, 0);
     this.setCollideWorldBounds(true);
 
     // prevent movement from collisions (such as from bullets)
     this.setImmovable(true);
+
+    // Add the player to the scene
+    scene.add.existing(this);
   }
 
   /**
