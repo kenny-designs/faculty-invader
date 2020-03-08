@@ -75,6 +75,9 @@ function update(time, delta) {
   //  TODO: see if parallax with ship
   this.background.tilePositionY -= 100 / delta;
 
+  // update the player
+  this.player.update(time, delta);
+
   // TODO: refactor into its own function
   // control player movement
   if(this.cursors.left.isDown) {

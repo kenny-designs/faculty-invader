@@ -27,7 +27,14 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
    * @override
    */ 
   update(time, delta) {
-    if (this.y < -50) {
+    this.checkBounds();
+  }
+
+  /**
+   * Checks to see if the bullet is on the screen. Remove if it is not.
+   */
+  checkBounds() {
+    if (this.y < -this.displayHeight) {
       this.setActive(false);
       this.setVisible(false);
     }
@@ -43,6 +50,7 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
     this.setPosition(xPos, yPos);
     this.setVelocityY(yVel);
 
+    // set bullet to be active
     this.setActive(true);
     this.setVisible(true);
   }

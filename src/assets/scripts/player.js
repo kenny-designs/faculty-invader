@@ -31,6 +31,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       runChildUpdate: true
     });
 
+    // time since last fire in milliseconds
     this.lastFire = 0;
 
     // Add the player to the scene
@@ -41,7 +42,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    * @override
    */
   update(time, delta) {
-    console.log('penis');
+    // update time since last fire
+    this.lastFire += delta;
   }
 
   /**
@@ -71,9 +73,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    * Fire
    */ 
   fireBullet() {
+    if (this.lastFire < 100) return;
+
     let bullet = this.bullets.get();
     if(bullet) {
       bullet.fireBullet(this.x, this.y, -1000);
+      this.lastFire = 0;
     }
   }
 }
