@@ -18,7 +18,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     // always play fly animation
     this.anims.play('fly');
 
-    // nable physics
+    // enable physics
     scene.physics.world.enableBody(this, 0);
     this.setCollideWorldBounds(true);
 

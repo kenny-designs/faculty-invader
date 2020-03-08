@@ -21,7 +21,10 @@ const config = {
   width: 800,
   height: 600,
   physics: {
-    default: 'arcade'
+    default: 'arcade',
+    arcade: {
+      debug:true
+    }
   },
   scene: {
     preload: preload,
@@ -67,8 +70,15 @@ function create() {
     repeat: -1
   });
 
+  // TODO: place inside a group
   // create a sample enemy
   this.enemy = new Enemy(this, 400, 100, 'invader');
+
+  // TODO: find a better place for this
+  // setup collisions
+  this.physics.add.overlap(this.player.bullets, this.enemy, (object1, object2) => {
+    this.enemy.destroy();
+  });
 
   // set up keyboard input
   // TODO: Create a input controller class to handle all this

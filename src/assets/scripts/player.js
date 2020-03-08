@@ -24,7 +24,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.setImmovable(true);
 
     // setup bullet pool
-    this.bullets = scene.add.group({
+    this.bullets = scene.physics.add.group({
       classType: Bullet,
       defaultKey: 'bullet',
       maxSize: 30,
