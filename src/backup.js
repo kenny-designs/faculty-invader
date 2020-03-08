@@ -72,29 +72,6 @@ function create() {
   //  The scrolling starfield background
   starfield = this.add.tileSprite(0, 0, 800, 600, 'starfield');
 
-  /*
-  //  Our bullet group
-  // TODO: *set anchor x to 0.5 and y to 1
-  //       *out of bounds kill 
-  bullets = this.physics.add.group(
-    {
-      key: 'bullet',
-      quantity: 30,
-      collideWorldBounds: true
-    });
-
-
-  // TODO: *set anchor x to 0.5 and y to 1
-  //       *out of bounds kill 
-  // The enemy's bullets
-  enemyBullets = this.physics.add.group(
-    {
-      key: 'enemyBullet',
-      quantity: 30,
-      collideWorldBounds: true
-    });
-    */
-
   //  The hero!
   player = this.add.sprite(400, 500, 'ship');
   player.anchor.setTo(0.5, 0.5);

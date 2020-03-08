@@ -3,6 +3,7 @@ import Phaser from "phaser";
 
 // import custom classes
 import Player from './assets/scripts/player.js';
+import Enemy  from './assets/scripts/enemy.js';
 
 // import image assets
 import bulletImg      from './assets/images/bullet.png';
@@ -57,6 +58,17 @@ function create() {
 
   // create the player
   this.player = new Player(this, 400, 500, 'ship');
+
+  // TODO: find a better place for this
+  this.anims.create({
+    key: 'fly',
+    frames: this.anims.generateFrameNumbers('invader', {start: 0, end: 3}),
+    frameRate: 20,
+    repeat: -1
+  });
+
+  // create a sample enemy
+  this.enemy = new Enemy(this, 400, 100, 'invader');
 
   // set up keyboard input
   // TODO: Create a input controller class to handle all this
