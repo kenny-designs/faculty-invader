@@ -2,8 +2,9 @@
 import Phaser from "phaser";
 
 // import custom classes
-import Player from './assets/scripts/player.js';
-import Enemy  from './assets/scripts/enemy.js';
+import Player     from './assets/scripts/player.js';
+import Enemy      from './assets/scripts/enemy.js';
+import Scoreboard from './assets/scripts/scoreboard.js';
 
 // import image assets
 import bulletImg      from './assets/images/bullet.png';
@@ -23,7 +24,7 @@ const config = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug:true
+      debug: true
     }
   },
   scene: {
@@ -55,9 +56,12 @@ function preload() {
  * Create game assets
  */ 
 function create() {
+  // get the width and height of the game
+  const WIDTH  = this.game.config.width,
+        HEIGHT = this.game.config.height;
+
   // create the background image
-  // TODO: fix hardcoded values
-  this.background = this.add.tileSprite(400, 300, 800, 600, 'starfield');
+  this.background = this.add.tileSprite(400, 300, WIDTH, HEIGHT, 'starfield');
 
   // create the player
   this.player = new Player(this, 400, 500, 'ship');
@@ -92,11 +96,15 @@ function create() {
     }
   });
 
+  // spawn in the scoreboard
+  this.scoreboard = new Scoreboard(this, 0, 0, 'Scoreboard');
+
   // TODO: find a better place for this and implement type checking
   // setup collisions
   this.physics.add.overlap(this.player.bullets, this.enemies, (object1, object2) => {
     object1.kill();
     object2.kill();
+    this.scoreboard.increaseScore(100);
   });
 
   // set up keyboard input
