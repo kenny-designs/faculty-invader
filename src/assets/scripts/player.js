@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import Bullet from './bullet.js';
 
 /**
  * @classdesc
