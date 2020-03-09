@@ -3,7 +3,7 @@ import Phaser from "phaser";
 
 // import custom classes
 import Player     from './assets/scripts/player.js';
-import Enemy      from './assets/scripts/enemy.js';
+import EnemyGroup from './assets/scripts/enemygroup.js';
 import Scoreboard from './assets/scripts/scoreboard.js';
 import BulletPool from './assets/scripts/bulletpool.js';
 
@@ -82,30 +82,18 @@ function create() {
     repeat: 0
   });
 
-  // setup enemy pool
-  this.enemies = this.physics.add.group({
-    classType: Enemy,
-    key: 'invader',
-    quantity: 55,
-    gridAlign: {
-      width: 11,
-      height: 5,
-      cellWidth: 64,
-      cellHeight: 64,
-      x: 64,
-      y: 64
-    }
-  });
-
   // spawn in the scoreboard
   this.scoreboard = new Scoreboard(this, 0, 0, 'Scoreboard');
 
   // pool of bullets shared by both the player and the enemies
   this.bulletPool = new BulletPool(this);
 
+  // group of enemies for the player to fight
+  this.enemyGroup = new EnemyGroup(this, this.bulletPool);
+
   // TODO: find a better place for this and implement type checking
   // setup collisions
-  this.physics.add.overlap(this.bulletPool, this.enemies, (object1, object2) => {
+  this.physics.add.overlap(this.bulletPool, this.enemyGroup, (object1, object2) => {
     object1.kill();
     object2.kill();
     this.scoreboard.increaseScore(100);
@@ -130,6 +118,9 @@ function update(time, delta) {
 
   // update the player
   this.player.update(time, delta);
+
+  // update the enemy group
+  this.enemyGroup.fireRandomEnemy(delta);
 
   // TODO: refactor into its own function
   // control player movement
