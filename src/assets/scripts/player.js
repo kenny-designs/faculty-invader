@@ -33,6 +33,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     // time since last fire in milliseconds
     this.lastFire = 0;
+    this.FIRE_RATE = 500; // half a second
 
     // Add the player to the scene
     scene.add.existing(this);
@@ -74,7 +75,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    */ 
   fireBullet() {
     // prevent player from firing too often
-    if (this.lastFire < 100) return;
+    if (this.lastFire < this.FIRE_RATE) return;
 
     // grab a bullet from the pool and fire it
     let bullet = this.bullets.get();
