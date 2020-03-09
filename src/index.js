@@ -70,6 +70,13 @@ function create() {
     repeat: -1
   });
 
+  this.anims.create({
+    key: 'explode',
+    frames: this.anims.generateFrameNumbers('kaboom'),
+    frameRate: 20,
+    repeat: 0
+  });
+
   // TODO: place inside a group
   // create a sample enemy
   this.enemy = new Enemy(this, 400, 100, 'invader');
@@ -77,7 +84,7 @@ function create() {
   // TODO: find a better place for this
   // setup collisions
   this.physics.add.overlap(this.player.bullets, this.enemy, (object1, object2) => {
-    this.enemy.destroy();
+    this.enemy.kill();
   });
 
   // set up keyboard input
