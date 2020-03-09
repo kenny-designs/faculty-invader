@@ -60,6 +60,13 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
     this.setActive(active);
     this.setVisible(active);
   }
+
+  /**
+   * Removes the bullet from play
+   */
+  kill() {
+    this.isActive = false;
+  }
 }
 
 export default Bullet;

@@ -18,7 +18,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     // setup animations
     this.anims.play('fly');
 
-    this.scene = scene;
+    this.isAlive = true;
 
     // enable physics
     scene.physics.world.enableBody(this, 0);
@@ -35,9 +35,12 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
    * Kills the enemy and plays an explosion in its place.
    */
   kill() {
+    if(!this.isAlive) return;
+
+    this.isAlive = false;
     this.anims.play('explode');
     this.on('animationcomplete', () => {
-      // TODO: better to pool enemies
+      // TODO: better to pool enemies rather than destroy out right
       this.destroy();
     });
   }

@@ -81,10 +81,11 @@ function create() {
   // create a sample enemy
   this.enemy = new Enemy(this, 400, 100, 'invader');
 
-  // TODO: find a better place for this
+  // TODO: find a better place for this and implement type checking
   // setup collisions
   this.physics.add.overlap(this.player.bullets, this.enemy, (object1, object2) => {
-    this.enemy.kill();
+    object1.kill();
+    object2.kill();
   });
 
   // set up keyboard input
