@@ -23,14 +23,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // prevent movement from collisions (such as from bullets)
     this.setImmovable(true);
 
-    // setup bullet pool
-    this.bullets = scene.physics.add.group({
-      classType: Bullet,
-      defaultKey: 'bullet',
-      maxSize: 30,
-      runChildUpdate: true
-    });
-
     // setup firing properties
     this.lastFire      = 0;     // delta time since last fire
     this.FIRE_RATE     = 500;   // how often in milliseconds to fire
@@ -73,17 +65,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   /**
    * Fire a bullet from the player's position
+   * @param bulletPool Pool of bullets to fire from
    */ 
-  fireBullet() {
+  fireBullet(bulletPool) {
     // prevent player from firing too often
     if (this.lastFire < this.FIRE_RATE) return;
 
-    // grab a bullet from the pool and fire it
-    let bullet = this.bullets.get();
-    if(bullet) {
-      bullet.fireBullet(this.x, this.y, this.FIRE_VELOCITY);
-      this.lastFire = 0;
-    }
+    bulletPool.fireBullet(this.x, this.y, this.FIRE_VELOCITY);
+    this.lastFire = 0;
   }
 }
 

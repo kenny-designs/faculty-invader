@@ -5,6 +5,8 @@ import Phaser from "phaser";
 import Player     from './assets/scripts/player.js';
 import Enemy      from './assets/scripts/enemy.js';
 import Scoreboard from './assets/scripts/scoreboard.js';
+import Bullet     from './assets/scripts/bullet.js';
+import BulletPool from './assets/scripts/bulletpool.js';
 
 // import image assets
 import bulletImg      from './assets/images/bullet.png';
@@ -99,9 +101,17 @@ function create() {
   // spawn in the scoreboard
   this.scoreboard = new Scoreboard(this, 0, 0, 'Scoreboard');
 
+  // pool of bullets shared by both the player and the enemies
+  this.bulletPool = new BulletPool(this.physics.world, this, {
+      classType: Bullet,
+      defaultKey: 'bullet',
+      maxSize: 30,
+      runChildUpdate: true
+  });
+
   // TODO: find a better place for this and implement type checking
   // setup collisions
-  this.physics.add.overlap(this.player.bullets, this.enemies, (object1, object2) => {
+  this.physics.add.overlap(this.bulletPool, this.enemies, (object1, object2) => {
     object1.kill();
     object2.kill();
     this.scoreboard.increaseScore(100);
@@ -141,6 +151,6 @@ function update(time, delta) {
 
   // Fire
   if(this.cursors.fire.isDown) {
-    this.player.fireBullet();
+    this.player.fireBullet(this.bulletPool);
   }
 }
