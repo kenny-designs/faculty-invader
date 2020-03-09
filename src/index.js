@@ -62,11 +62,11 @@ function create() {
   // create the player
   this.player = new Player(this, 400, 500, 'ship');
 
-  // TODO: find a better place for this
+  // TODO: find a better place for creating animations
   this.anims.create({
     key: 'fly',
     frames: this.anims.generateFrameNumbers('invader', {start: 0, end: 3}),
-    frameRate: 20,
+    frameRate: 10,
     repeat: -1
   });
 
@@ -77,13 +77,24 @@ function create() {
     repeat: 0
   });
 
-  // TODO: place inside a group
-  // create a sample enemy
-  this.enemy = new Enemy(this, 400, 100, 'invader');
+  // setup enemy pool
+  this.enemies = this.physics.add.group({
+    classType: Enemy,
+    key: 'invader',
+    quantity: 55,
+    gridAlign: {
+      width: 11,
+      height: 5,
+      cellWidth: 64,
+      cellHeight: 64,
+      x: 64,
+      y: 64
+    }
+  });
 
   // TODO: find a better place for this and implement type checking
   // setup collisions
-  this.physics.add.overlap(this.player.bullets, this.enemy, (object1, object2) => {
+  this.physics.add.overlap(this.player.bullets, this.enemies, (object1, object2) => {
     object1.kill();
     object2.kill();
   });
