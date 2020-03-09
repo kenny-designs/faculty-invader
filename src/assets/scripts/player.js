@@ -70,11 +70,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   /**
-   * Fire
+   * Fire a bullet from the player's position
    */ 
   fireBullet() {
+    // prevent player from firing too often
     if (this.lastFire < 100) return;
 
+    // grab a bullet from the pool and fire it
     let bullet = this.bullets.get();
     if(bullet) {
       bullet.fireBullet(this.x, this.y, -1000);

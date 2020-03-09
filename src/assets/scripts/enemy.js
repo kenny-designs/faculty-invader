@@ -18,6 +18,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     // setup animations
     this.anims.play('fly');
 
+    // enemy is initially alive
     this.isAlive = true;
 
     // enable physics
@@ -40,9 +41,16 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.isAlive = false;
     this.anims.play('explode');
     this.on('animationcomplete', () => {
-      // TODO: better to pool enemies rather than destroy out right
-      this.destroy();
+      this.disable();
     });
+  }
+
+  /**
+   * Disables the enemy's body so that it is no longer affected by the
+   * physics engine.
+   */ 
+  disable() {
+    this.disableBody(true, true);
   }
 }
 

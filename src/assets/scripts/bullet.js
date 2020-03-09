@@ -14,8 +14,8 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
     // enable physics on the bullet
     scene.physics.world.enableBody(this, 0);
 
-    // not active by default
-    this.isActive = false;
+    // disable the bullet by default
+    this.disable();
 
     // add the bullet to the scene
     scene.add.existing(this);
@@ -34,7 +34,7 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
    */
   checkBounds() {
     if (this.y < -this.displayHeight) {
-      this.isActive = false;
+      this.disable();
     }
   }
 
@@ -45,27 +45,23 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
    * @param yVel velocity to fire the bullet on the Y axis
    */
   fireBullet(xPos, yPos, yVel) {
-    this.setPosition(xPos, yPos);
+    this.enableBody(true, xPos, yPos, true, true);
     this.setVelocityY(yVel);
-
-    // set bullet to be active
-    this.isActive = true;
-  }
-
-  /**
-   * Set whether or not the bullet should be active in the scene
-   * @param active True if the bullet is active. False otherwise.
-   */
-  set isActive(active) {
-    this.setActive(active);
-    this.setVisible(active);
   }
 
   /**
    * Removes the bullet from play
    */
   kill() {
-    this.isActive = false;
+    this.disable();
+  }
+
+  /**
+   * Disables the bullet's body so that it is no longer affected by the
+   * physics engine.
+   */ 
+  disable() {
+    this.disableBody(true, true);
   }
 }
 
