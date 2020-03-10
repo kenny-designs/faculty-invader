@@ -90,14 +90,13 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
    */
   update(time, delta) {
     this.lastFire += delta;
-    this.fireRandomEnemy(delta);
+    this.fireRandomEnemy();
   }
 
   /**
    * Fires a bullet from a random enemy
-   * @param delta Time since last update
    */ 
-  fireRandomEnemy(delta) {
+  fireRandomEnemy() {
     // return if not enough time has passed since the last time we fired
     if(this.lastFire < this.FIRE_RATE) return;
 
@@ -113,6 +112,8 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
                                enemy.y,
                                this.FIRE_VELOCITY,
                                this.bulletPool.fireStates.ENEMY_FIRED);
+
+    // reset time since enemies last fired
     this.lastFire = 0;
   }
 }

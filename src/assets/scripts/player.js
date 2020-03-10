@@ -29,6 +29,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.name = 'player';
 
+    // number of lives left for the player
+    this.lives = 3;
+    this.livesText = scene.add.text(scene.game.config.width / 2, 10, 'Lives: ' + this.lives, {
+      fontSize: 32
+    });
+
     // Add the player to the scene
     scene.add.existing(this);
   }
@@ -84,6 +90,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    */
   kill() {
     console.log('Oh no! Player death!');
+    this.lives--;
   }
 }
 
