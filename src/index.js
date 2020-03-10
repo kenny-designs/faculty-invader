@@ -123,14 +123,13 @@ function create() {
  */ 
 function update(time, delta) {
   //  Scroll the background
-  //  TODO: see if parallax with ship
   this.background.tilePositionY -= 100 / delta;
 
   // update the player
   this.player.update(time, delta);
 
   // update the enemy group
-  this.enemyGroup.fireRandomEnemy(delta);
+  this.enemyGroup.update(time, delta);
 
   // TODO: refactor into its own function
   // control player movement

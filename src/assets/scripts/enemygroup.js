@@ -86,12 +86,20 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
   }
 
   /**
+   * Updates the enemy group
+   */
+  update(time, delta) {
+    this.lastFire += delta;
+    this.fireRandomEnemy(delta);
+  }
+
+  /**
    * Fires a bullet from a random enemy
    * @param delta Time since last update
    */ 
   fireRandomEnemy(delta) {
     // return if not enough time has passed since the last time we fired
-    if((this.lastFire += delta) < this.FIRE_RATE) return;
+    if(this.lastFire < this.FIRE_RATE) return;
 
     // get a random living child
     let children = this.getChildren().filter(child => child.isAlive);;
