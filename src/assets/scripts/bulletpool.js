@@ -21,6 +21,9 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     this.firedState;
 
+    this.TOP_BOUND = -this.displayHeight;
+    this.BOTTOM_BOUND = scene.game.config.height + this.displayHeight;
+
     // add the bullet to the scene
     scene.add.existing(this);
   }
@@ -37,7 +40,7 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
    * Checks to see if the bullet is on the screen. Remove if it is not.
    */
   checkBounds() {
-    if (this.y < -this.displayHeight) {
+    if (this.y < this.TOP_BOUND || this.y > this.BOTTOM_BOUND) {
       this.kill();
     }
   }
