@@ -89,8 +89,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    * Kills the player
    */
   kill() {
-    console.log('Oh no! Player death!');
-    this.lives--;
+    this.livesText.setText('Lives: ' + --this.lives);
+    if(this.lives <= 0) {
+      alert('YOU DIED!');
+    }
   }
 }
 
