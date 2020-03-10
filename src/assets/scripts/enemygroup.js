@@ -21,6 +21,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     // enemy is initially alive
     this.isAlive = true;
 
+    this.name = 'enemy';
+
     // enable physics
     scene.physics.world.enableBody(this, 0);
     this.setCollideWorldBounds(true);
@@ -79,7 +81,6 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     this.FIRE_RATE     = 1000;   // how often in milliseconds to fire
     this.FIRE_VELOCITY = 1000; // velocity for the bullet to move at
 
-
     // Add the player to the scene
     scene.add.existing(this);
   }
@@ -100,7 +101,10 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     if(typeof enemy === 'undefined') return;
 
     // fire the bullet and reset lastFire
-    this.bulletPool.fireBullet(enemy.x, enemy.y, this.FIRE_VELOCITY);
+    this.bulletPool.fireBullet(enemy.x,
+                               enemy.y,
+                               this.FIRE_VELOCITY,
+                               this.bulletPool.fireStates.ENEMY_FIRED);
     this.lastFire = 0;
   }
 }

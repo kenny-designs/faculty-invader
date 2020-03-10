@@ -17,6 +17,10 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
     // disable the bullet by default
     this.disableBody(true, true);
 
+    this.name = 'bullet';
+
+    this.firedState;
+
     // add the bullet to the scene
     scene.add.existing(this);
   }
@@ -46,7 +50,6 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
   }
 }
 
-
 /**
  * @classdesc
  * BulletPool class. Manages firing bullets throughout the game.
@@ -64,6 +67,13 @@ class BulletPool extends Phaser.Physics.Arcade.Group {
       runChildUpdate: true
     });
 
+    // create various states for how the bullet was fired
+    this.fireStates = Object.freeze({
+      'NONE': 1,
+      'ENEMY_FIRED': 2,
+      'PLAYER_FIRED': 3
+    });
+
     // Add the player to the scene
     scene.add.existing(this);
   }
@@ -72,12 +82,14 @@ class BulletPool extends Phaser.Physics.Arcade.Group {
    * Fire a bullet from the given position
    * @param xPos X position to fire from
    * @param yPos Y position to fire from
-   * @param yVel velocity to fire the bullet on the Y axis
+   * @param yVel The velocity to fire the bullet on the Y axis
+   * @param state The fire state of the bullet
    */ 
-  fireBullet(xPos, yPos, yVel) {
+  fireBullet(xPos, yPos, yVel, state) {
     // grab a bullet from the pool and fire it
     let bullet = this.get();
     if(bullet) {
+      bullet.firedState = state;
       bullet.enableBody(true, xPos, yPos, true, true);
       bullet.setVelocityY(yVel);
     }

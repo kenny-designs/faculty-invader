@@ -27,6 +27,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.FIRE_RATE     = 500;   // how often in milliseconds to fire
     this.FIRE_VELOCITY = -1000; // velocity for the bullet to move at
 
+    this.name = 'player';
+
     // Add the player to the scene
     scene.add.existing(this);
   }
@@ -70,8 +72,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // prevent player from firing too often
     if (this.lastFire < this.FIRE_RATE) return;
 
-    bulletPool.fireBullet(this.x, this.y, this.FIRE_VELOCITY);
+    bulletPool.fireBullet(this.x,
+                          this.y,
+                          this.FIRE_VELOCITY,
+                          bulletPool.fireStates.PLAYER_FIRED);
     this.lastFire = 0;
+  }
+
+  /**
+   * Kills the player
+   */
+  kill() {
+    console.log('Oh no! Player death!');
   }
 }
 

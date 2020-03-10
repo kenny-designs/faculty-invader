@@ -92,11 +92,21 @@ function create() {
   this.enemyGroup = new EnemyGroup(this, this.bulletPool);
 
   // TODO: find a better place for this and implement type checking
-  // setup collisions
-  this.physics.add.overlap(this.bulletPool, this.enemyGroup, (object1, object2) => {
-    object1.kill();
-    object2.kill();
-    this.scoreboard.increaseScore(100);
+  // bullet hits an enemy
+  this.physics.add.overlap(this.enemyGroup, this.bulletPool, (enemy, bullet) => {
+    if(bullet.firedState === this.bulletPool.fireStates.PLAYER_FIRED) {
+      enemy.kill();
+      bullet.kill();
+      this.scoreboard.increaseScore(100);
+    }
+  });
+
+  // bullet hits the player
+  this.physics.add.overlap(this.player, this.bulletPool, (player, bullet) => {
+    if(bullet.firedState === this.bulletPool.fireStates.ENEMY_FIRED) {
+      player.kill();
+      bullet.kill();
+    }
   });
 
   // set up keyboard input
