@@ -74,7 +74,11 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     // bullet pool reference
     this.bulletPool = bulletPool;
 
-    this.lastFire = 0;
+    // setup firing properties
+    this.lastFire      = 0;     // delta time since last fire
+    this.FIRE_RATE     = 1000;   // how often in milliseconds to fire
+    this.FIRE_VELOCITY = 1000; // velocity for the bullet to move at
+
 
     // Add the player to the scene
     scene.add.existing(this);
@@ -85,14 +89,19 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
    * @param delta Time since last update
    */ 
   fireRandomEnemy(delta) {
-    this.lastFire += delta;
+    // return if not enough time has passed since the last time we fired
+    if((this.lastFire += delta) < this.FIRE_RATE) return;
 
-    if(this.lastFire > 1000) {
-      let children = this.getChildren().filter(child => child.isAlive);;
-      let enemy = Phaser.Math.RND.pick(children);
-      this.bulletPool.fireBullet(enemy.x, enemy.y, 1000);
-      this.lastFire = 0;
-    }
+    // get a random living child
+    let children = this.getChildren().filter(child => child.isAlive);;
+    let enemy = Phaser.Math.RND.pick(children);
+
+    // return if we have no enemies left
+    if(typeof enemy === 'undefined') return;
+
+    // fire the bullet and reset lastFire
+    this.bulletPool.fireBullet(enemy.x, enemy.y, this.FIRE_VELOCITY);
+    this.lastFire = 0;
   }
 }
 
