@@ -62,7 +62,6 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     super(scene.physics.world, scene, {
       classType: Enemy,
       key: 'invader',
-      collideWorldBounds: true,
       quantity: 55,
       gridAlign: {
         width: 11,
@@ -82,23 +81,33 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     this.FIRE_RATE     = 1000; // how often in milliseconds to fire
     this.FIRE_VELOCITY = 1000; // velocity for the bullet to move at
 
-    // enable world bounds check on invaders
-    this.getChildren().forEach(invader => {
-      invader.body.onWorldBounds = true;
-    });
+    // setup group movement properties
+    this.curVelocity = 10;
 
-    this.curVelocity = 100;
+    // keep a rectangle representing the width of the group at all times
+    this.collisionRect = new Phaser.GameObjects.Rectangle(scene, 0, 0);
+    this.collisionRect.setOrigin(0);
+    this.updateCollisionRect();
+    this.add(this.collisionRect, true);
+    
+    // make it so collisionRect only checks for collisions with the world bounds
+    this.collisionRect.body.collideWorldBounds = true;
+    this.collisionRect.body.onWorldBounds = true;
+    this.collisionRect.body.checkCollision.none = true;
 
+    // handle worldbounds events from colliionRct hitting world bounds
     scene.physics.world.on('worldbounds', (body) => {
-      this.curVelocity *= -1;
-      this.setVelocityX(this.curVelocity);
+      // reverse group direction
+      this.setVelocityX((this.curVelocity *= -1));
 
-      this.incY(10);
+      // lower group a level
+      this.incY(32);
     });
 
-    this.setVelocityX(100);
+    // begin group movement
+    this.setVelocityX(this.curVelocity);
 
-    // Add the player to the scene
+    // Add the group to the scene
     scene.add.existing(this);
   }
 
@@ -118,8 +127,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     if(this.lastFire < this.FIRE_RATE) return;
 
     // get a random living child
-    let children = this.getChildren().filter(child => child.isAlive);;
-    let enemy = Phaser.Math.RND.pick(children);
+    let enemy = Phaser.Math.RND.pick(this.livingEnemies);
 
     // return if we have no enemies left
     if(typeof enemy === 'undefined') return;
@@ -132,6 +140,38 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
 
     // reset time since enemies last fired
     this.lastFire = 0;
+  }
+
+  /**
+   * Updates the rectangle with a new x, y, and width to match the invaders
+   */
+  updateCollisionRect() {
+    let lowX  = Number.MAX_SAFE_INTEGER,
+        highX = Number.MIN_SAFE_INTEGER;
+
+    this.livingEnemies.forEach((enemy) => {
+      // offset from enemies center
+      let offset = enemy.width / 2;
+
+      if(enemy.x - offset < lowX) {
+        lowX = enemy.x - offset;
+      }
+
+      if(enemy.x + enemy.width - offset > highX) {
+        highX = enemy.x + enemy.width - offset;
+      }
+    });
+
+    // set the rectangle to a new width and x position to match the group
+    this.collisionRect.setSize(highX - lowX, 100);
+    this.collisionRect.setPosition(lowX, 100);
+  }
+
+  /**
+   * Returns all enemies who are still alive
+   */ 
+  get livingEnemies() {
+    return this.getChildren().filter(child => child.isAlive);;
   }
 }
 
