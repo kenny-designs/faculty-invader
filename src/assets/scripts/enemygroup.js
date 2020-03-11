@@ -93,7 +93,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
       this.curVelocity *= -1;
       this.setVelocityX(this.curVelocity);
 
-      //this.incY(10);
+      this.incY(10);
     });
 
     this.setVelocityX(100);
