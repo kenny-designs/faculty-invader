@@ -102,6 +102,7 @@ function create() {
       enemy.kill();
       bullet.kill();
       this.scoreboard.increaseScore(100);
+      this.enemyGroup.updateCollisionRect();
     }
   });
 
@@ -111,6 +112,13 @@ function create() {
       player.kill();
       bullet.kill();
     }
+  });
+
+  // enemy runs into the player
+  this.physics.add.overlap(this.player, this.enemyGroup, (player, enemy) => {
+    player.kill();
+    enemy.kill();
+    this.enemyGroup.updateCollisionRect();
   });
 
   // set up keyboard input
