@@ -114,6 +114,13 @@ function create() {
     }
   });
 
+  // enemy runs into the player
+  this.physics.add.overlap(this.player, this.enemyGroup, (player, enemy) => {
+    player.kill();
+    enemy.kill();
+    this.enemyGroup.updateCollisionRect();
+  });
+
   // set up keyboard input
   // TODO: Create a input controller class to handle all this
   this.cursors = this.input.keyboard.addKeys({
