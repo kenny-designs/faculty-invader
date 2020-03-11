@@ -88,7 +88,8 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     this.collisionRect.body.onWorldBounds       = true;
     this.collisionRect.body.checkCollision.none = true;
 
-    // handle worldbounds events from colliionRect hitting world bounds
+    // handle worldbounds events from collisionRect hitting world bounds
+    // TODO: make it so this is only fired when collisionRect hits world bounds
     scene.physics.world.on('worldbounds', (body) => {
       // reverse group direction
       this.setVelocityX((this.curVelocity *= -1));
@@ -119,8 +120,12 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     // return if not enough time has passed since the last time we fired
     if(this.lastFire < this.FIRE_RATE) return;
 
+    // return if no living enemies remain
+    let living = this.livingEnemies;
+    if(living.length < 1) return;
+
     // get a random living child
-    let enemy = Phaser.Utils.Array.GetRandom(this.livingEnemies);
+    let enemy = Phaser.Utils.Array.GetRandom(living);
 
     // return if we have no enemies left
     if(typeof enemy === 'undefined') return;
