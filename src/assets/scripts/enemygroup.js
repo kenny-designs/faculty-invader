@@ -77,8 +77,8 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     this.bulletPool = bulletPool;
 
     // setup firing properties
-    this.lastFire      = 0;     // delta time since last fire
-    this.FIRE_RATE     = 1000;   // how often in milliseconds to fire
+    this.lastFire      = 0;    // delta time since last fire
+    this.FIRE_RATE     = 1000; // how often in milliseconds to fire
     this.FIRE_VELOCITY = 1000; // velocity for the bullet to move at
 
     // Add the player to the scene
