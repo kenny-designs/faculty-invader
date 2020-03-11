@@ -23,13 +23,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     this.name = 'enemy';
 
-    // enable physics
-    scene.physics.world.enableBody(this, 0);
-    this.setCollideWorldBounds(true);
-
-    // prevent movement from collisions (such as from bullets)
-    this.setImmovable(true);
-
     // add the enemy to the scene
     scene.add.existing(this);
   }
@@ -95,7 +88,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     this.collisionRect.body.onWorldBounds = true;
     this.collisionRect.body.checkCollision.none = true;
 
-    // handle worldbounds events from colliionRct hitting world bounds
+    // handle worldbounds events from colliionRect hitting world bounds
     scene.physics.world.on('worldbounds', (body) => {
       // reverse group direction
       this.setVelocityX((this.curVelocity *= -1));
