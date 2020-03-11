@@ -62,6 +62,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     super(scene.physics.world, scene, {
       classType: Enemy,
       key: 'invader',
+      collideWorldBounds: true,
       quantity: 55,
       gridAlign: {
         width: 11,
@@ -80,6 +81,22 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     this.lastFire      = 0;    // delta time since last fire
     this.FIRE_RATE     = 1000; // how often in milliseconds to fire
     this.FIRE_VELOCITY = 1000; // velocity for the bullet to move at
+
+    // enable world bounds check on invaders
+    this.getChildren().forEach(invader => {
+      invader.body.onWorldBounds = true;
+    });
+
+    this.curVelocity = 100;
+
+    scene.physics.world.on('worldbounds', (body) => {
+      this.curVelocity *= -1;
+      this.setVelocityX(this.curVelocity);
+
+      //this.incY(10);
+    });
+
+    this.setVelocityX(100);
 
     // Add the player to the scene
     scene.add.existing(this);
