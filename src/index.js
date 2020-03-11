@@ -102,6 +102,7 @@ function create() {
       enemy.kill();
       bullet.kill();
       this.scoreboard.increaseScore(100);
+      this.enemyGroup.updateCollisionRect();
     }
   });
 

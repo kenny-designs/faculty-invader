@@ -79,13 +79,13 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
 
     // keep a rectangle representing the width of the group at all times
     this.collisionRect = new Phaser.GameObjects.Rectangle(scene, 0, 0);
-    this.collisionRect.setOrigin(0);
-    this.updateCollisionRect();
+    this.collisionRect.setOrigin(0); // set origin to top left corner of rect
     this.add(this.collisionRect, true);
+    this.updateCollisionRect();
     
     // make it so collisionRect only checks for collisions with the world bounds
-    this.collisionRect.body.collideWorldBounds = true;
-    this.collisionRect.body.onWorldBounds = true;
+    this.collisionRect.body.collideWorldBounds  = true;
+    this.collisionRect.body.onWorldBounds       = true;
     this.collisionRect.body.checkCollision.none = true;
 
     // handle worldbounds events from colliionRect hitting world bounds
@@ -93,7 +93,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
       // reverse group direction
       this.setVelocityX((this.curVelocity *= -1));
 
-      // lower group a level
+      // lower group by a level
       this.incY(32);
     });
 
@@ -120,7 +120,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     if(this.lastFire < this.FIRE_RATE) return;
 
     // get a random living child
-    let enemy = Phaser.Math.RND.pick(this.livingEnemies);
+    let enemy = Phaser.Utils.Array.GetRandom(this.livingEnemies);
 
     // return if we have no enemies left
     if(typeof enemy === 'undefined') return;
@@ -139,10 +139,13 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
    * Updates the rectangle with a new x, y, and width to match the invaders
    */
   updateCollisionRect() {
+    let enemies = this.livingEnemies;
+    if(enemies.length < 1) return;
+
     let lowX  = Number.MAX_SAFE_INTEGER,
         highX = Number.MIN_SAFE_INTEGER;
 
-    this.livingEnemies.forEach((enemy) => {
+    Phaser.Utils.Array.Each(enemies, (enemy) => {
       // offset from enemies center
       let offset = enemy.width / 2;
 
@@ -157,6 +160,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
 
     // set the rectangle to a new width and x position to match the group
     this.collisionRect.setSize(highX - lowX, 100);
+    this.collisionRect.body.setSize(highX - lowX, 100);
     this.collisionRect.setPosition(lowX, 100);
   }
 
