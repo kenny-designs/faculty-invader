@@ -19,6 +19,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     scene.physics.world.enableBody(this, 0);
     this.setCollideWorldBounds(true);
 
+    // Set size
+    this.setDisplaySize(32, 64);
+
     // prevent movement from collisions (such as from bullets)
     this.setImmovable(true);
 

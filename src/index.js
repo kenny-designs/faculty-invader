@@ -11,7 +11,7 @@ import BulletPool from './assets/scripts/bulletpool.js';
 import bulletImg      from './assets/images/bullet.png';
 import enemyBulletImg from './assets/images/enemy-bullet.png';
 import invaderImg     from './assets/images/invader32x32x4.png';
-import shipImg        from './assets/images/player.png';
+import shipImg        from './assets/images/gross.png';
 import kaboomImg      from './assets/images/explode.png';
 import starfieldImg   from './assets/images/starfield.png';
 import backgroundImg  from './assets/images/background2.png';
