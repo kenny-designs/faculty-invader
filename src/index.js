@@ -1,6 +1,8 @@
 // import the game framework phaser
 import Phaser from "phaser";
 
+const imageDir = './assets/images/';
+
 // import custom classes
 import Player     from './assets/scripts/player.js';
 import EnemyGroup from './assets/scripts/enemygroup.js';
@@ -9,12 +11,16 @@ import BulletPool from './assets/scripts/bulletpool.js';
 
 // import image assets
 import bulletImg      from './assets/images/bullet.png';
+import snakeImg       from './assets/images/snake.png';
 import enemyBulletImg from './assets/images/enemy-bullet.png';
 import invaderImg     from './assets/images/invader32x32x4.png';
-import shipImg        from './assets/images/gross.png';
+import grossImg       from './assets/images/gross.png';
 import kaboomImg      from './assets/images/explode.png';
 import starfieldImg   from './assets/images/starfield.png';
 import backgroundImg  from './assets/images/background2.png';
+
+// import json files
+import snakeJSON      from './assets/images/snake.json';
 
 // create configuration file for our game
 const config = {
@@ -48,13 +54,16 @@ function preload() {
   // load images
   this.load.image('bullet',        bulletImg);
   this.load.image('enemyBullet',   enemyBulletImg);
-  this.load.image('ship',          shipImg);
+  this.load.image('gross',         grossImg);
   this.load.image('starfield',     starfieldImg);
   this.load.image('background',    backgroundImg);
 
   // load spritesheets
   this.load.spritesheet('invader', invaderImg, { frameWidth: 32, frameHeight: 32 });
   this.load.spritesheet('kaboom',  kaboomImg, { frameWidth: 128, frameHeight: 128 });
+
+  // load texture atlas
+  this.load.atlas('snake', snakeImg, snakeJSON);
 }
 
 /**
@@ -69,7 +78,7 @@ function create() {
   this.background = this.add.tileSprite(400, 300, WIDTH, HEIGHT, 'starfield');
 
   // create the player
-  this.player = new Player(this, 400, 500, 'ship');
+  this.player = new Player(this, 400, 500, 'gross');
 
   // TODO: find a better place for creating animations
   this.anims.create({
@@ -84,6 +93,18 @@ function create() {
     frames: this.anims.generateFrameNumbers('kaboom'),
     frameRate: 20,
     repeat: 0
+  });
+
+  this.anims.create({
+    key: 'snake-anim',
+    frames: this.anims.generateFrameNames('snake', {
+      start: 0,
+      end: 1,
+      prefix: 'snake_',
+      suffix: '.png'
+    }),
+    frameRate: 5,
+    repeat: -1
   });
 
   // spawn in the scoreboard

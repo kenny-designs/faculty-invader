@@ -15,6 +15,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
 
+    // Set size
+    this.setDisplaySize(32, 32);
+
     // setup animations
     this.anims.play('fly');
 
@@ -134,7 +137,8 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     this.bulletPool.fireBullet(enemy.x,
                                enemy.y,
                                this.FIRE_VELOCITY,
-                               this.bulletPool.fireStates.ENEMY_FIRED);
+                               this.bulletPool.fireStates.ENEMY_FIRED,
+                               'enemyBullet');
 
     // reset time since enemies last fired
     this.lastFire = 0;

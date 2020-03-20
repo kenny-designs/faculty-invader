@@ -84,7 +84,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     bulletPool.fireBullet(this.x,
                           this.y,
                           this.FIRE_VELOCITY,
-                          bulletPool.fireStates.PLAYER_FIRED);
+                          bulletPool.fireStates.PLAYER_FIRED,
+                          'bullet');
     this.lastFire = 0;
   }
 
@@ -94,7 +95,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   kill() {
     this.livesText.setText('Lives: ' + --this.lives);
     if(this.lives <= 0) {
-      alert('YOU DIED!');
+      //alert('YOU DIED!');
     }
   }
 }
