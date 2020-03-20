@@ -1,8 +1,6 @@
 // import the game framework phaser
 import Phaser from "phaser";
 
-const imageDir = './assets/images/';
-
 // import custom classes
 import Player     from './assets/scripts/player.js';
 import EnemyGroup from './assets/scripts/enemygroup.js';
@@ -20,7 +18,7 @@ import starfieldImg   from './assets/images/starfield.png';
 import backgroundImg  from './assets/images/background2.png';
 
 // import json files
-import snakeJSON      from './assets/images/snake.json';
+import snakeJSON from './assets/images/snake.json';
 
 // create configuration file for our game
 const config = {

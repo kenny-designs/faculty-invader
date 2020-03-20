@@ -55,6 +55,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    * @param xVel x velocity to move the player
    */ 
   moveLeft(xVel) {
+    // face sprite to the left
+    if (!this.flipX) this.setFlipX(true);
+
     this.setVelocityX(-xVel);
   }
 
@@ -63,6 +66,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    * @param xVel x velocity to move the player
    */ 
   moveRight(xVel) {
+    // face sprite to the right
+    if (this.flipX) this.setFlipX(false);
+
     this.setVelocityX(xVel);
   }
 
