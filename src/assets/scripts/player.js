@@ -81,11 +81,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // prevent player from firing too often
     if (this.lastFire < this.FIRE_RATE) return;
 
+    // fire the bullet
     bulletPool.fireBullet(this.x,
                           this.y,
                           this.FIRE_VELOCITY,
                           bulletPool.fireStates.PLAYER_FIRED,
-                          'bullet');
+                          null,
+                          'snake-anim');
+
+    // reset firing timer
     this.lastFire = 0;
   }
 
@@ -95,7 +99,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   kill() {
     this.livesText.setText('Lives: ' + --this.lives);
     if(this.lives <= 0) {
-      //alert('YOU DIED!');
+      console.log('YOU DIED');
     }
   }
 }

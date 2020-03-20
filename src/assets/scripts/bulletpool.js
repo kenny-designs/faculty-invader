@@ -91,17 +91,18 @@ class BulletPool extends Phaser.Physics.Arcade.Group {
    * @param yPos Y position to fire from
    * @param yVel The velocity to fire the bullet on the Y axis
    * @param state The fire state of the bullet
-   * @param the texture to fire the bullet with
+   * @param texture The texture key to fire the bullet with
+   * @param anim The animation key to play when firing
    */ 
-  fireBullet(xPos, yPos, yVel, state, texture = 'bullet') {
+  fireBullet(xPos, yPos, yVel, state, texture = 'bullet', anim = null) {
     // grab a bullet from the pool and fire it
     let bullet = this.get();
     if(bullet) {
-      bullet.setTexture(texture);
-      if (state === this.fireStates.PLAYER_FIRED) {
-        bullet.anims.play('snake-anim');
-      }
-     
+      // assign a texture/animation to the bullet
+      if(texture) bullet.setTexture(texture);
+      if(anim)    bullet.anims.play(anim);
+    
+      // enable and launch the bullet
       bullet.firedState = state;
       bullet.enableBody(true, xPos, yPos, true, true);
       bullet.setVelocityY(yVel);
