@@ -7,19 +7,22 @@ import Phaser from 'phaser';
 class Enemy extends Phaser.Physics.Arcade.Sprite {
   /**
    * Creates a new enemy object
-   * @param scene The scene to spawn the player in
-   * @param x The x position to spawn the player in
-   * @param y The y position to spawn the player in
-   * @param texture Texture key for the ship's sprite
+   * @param scene The scene to spawn the enemy in
+   * @param x The x position to spawn the enemy in
+   * @param y The y position to spawn the enemy in
+   * @param texture Texture key for the enemy sprite
    */ 
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
 
-    // Set size
-    this.setDisplaySize(32, 32);
+    // Enable physics
+    scene.physics.world.enableBody(this, 0);
 
     // setup animations
-    this.anims.play('fly');
+    //this.anims.play('thurm-anim');
+
+    // Set size
+    this.setDisplaySize(32, 32);
 
     // enemy is initially alive
     this.isAlive = true;
@@ -57,7 +60,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
   constructor(scene, bulletPool) {
     super(scene.physics.world, scene, {
       classType: Enemy,
-      key: 'invader',
+      key: 'gross',
       quantity: 55,
       gridAlign: {
         width: 11,

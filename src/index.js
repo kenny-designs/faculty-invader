@@ -11,14 +11,15 @@ import BulletPool from './assets/scripts/bulletpool.js';
 import bulletImg      from './assets/images/bullet.png';
 import snakeImg       from './assets/images/snake.png';
 import enemyBulletImg from './assets/images/enemy-bullet.png';
-import invaderImg     from './assets/images/invader32x32x4.png';
 import grossImg       from './assets/images/gross.png';
 import kaboomImg      from './assets/images/explode.png';
 import starfieldImg   from './assets/images/starfield.png';
 import backgroundImg  from './assets/images/background2.png';
+import facultyImg     from './assets/images/faculty-atlas.png';
 
 // import json files
-import snakeJSON from './assets/images/snake.json';
+import snakeJSON   from './assets/images/snake.json';
+import facultyJSON from './assets/images/faculty-atlas.json';
 
 // create configuration file for our game
 const config = {
@@ -57,11 +58,11 @@ function preload() {
   this.load.image('background',    backgroundImg);
 
   // load spritesheets
-  this.load.spritesheet('invader', invaderImg, { frameWidth: 32, frameHeight: 32 });
   this.load.spritesheet('kaboom',  kaboomImg, { frameWidth: 128, frameHeight: 128 });
 
   // load texture atlas
   this.load.atlas('snake', snakeImg, snakeJSON);
+  this.load.atlas('faculty', facultyImg, facultyJSON);
 }
 
 /**
@@ -80,13 +81,6 @@ function create() {
 
   // TODO: find a better place for creating animations
   this.anims.create({
-    key: 'fly',
-    frames: this.anims.generateFrameNumbers('invader', {start: 0, end: 3}),
-    frameRate: 10,
-    repeat: -1
-  });
-
-  this.anims.create({
     key: 'explode',
     frames: this.anims.generateFrameNumbers('kaboom'),
     frameRate: 20,
@@ -99,6 +93,19 @@ function create() {
       start: 0,
       end: 1,
       prefix: 'snake_',
+      suffix: '.png'
+    }),
+    frameRate: 5,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'thurm-anim',
+    frames: this.anims.generateFrameNames('faculty', {
+      start: 1,
+      end: 4,
+      zeroPad: 2,
+      prefix: 'prof_thurm_animation/',
       suffix: '.png'
     }),
     frameRate: 5,

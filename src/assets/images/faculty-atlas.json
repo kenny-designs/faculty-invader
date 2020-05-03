@@ -1,7 +1,7 @@
 {
 	"textures": [
 		{
-			"image": "cisc3140_space_invader_project.png",
+			"image": "faculty-atlas.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 899,
