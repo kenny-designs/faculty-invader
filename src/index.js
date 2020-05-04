@@ -8,13 +8,14 @@ import Scoreboard from './assets/scripts/scoreboard.js';
 import BulletPool from './assets/scripts/bulletpool.js';
 
 // import image assets
-import bulletImg      from './assets/images/bullet.png';
-import enemyBulletImg from './assets/images/enemy-bullet.png';
-import invaderImg     from './assets/images/invader32x32x4.png';
-import shipImg        from './assets/images/player.png';
+import bulletImg      from './assets/images/snake.png';
+import enemyBulletImg from './assets/images/f-letter.png';
+import grossImg       from './assets/images/gross.png';
 import kaboomImg      from './assets/images/explode.png';
-import starfieldImg   from './assets/images/starfield.png';
-import backgroundImg  from './assets/images/background2.png';
+import backgroundImg  from './assets/images/classroom.jpg';
+
+// import faculty images
+import facultyThurm from './assets/images/thurm.png';
 
 // create configuration file for our game
 const config = {
@@ -48,12 +49,11 @@ function preload() {
   // load images
   this.load.image('bullet',        bulletImg);
   this.load.image('enemyBullet',   enemyBulletImg);
-  this.load.image('ship',          shipImg);
-  this.load.image('starfield',     starfieldImg);
+  this.load.image('gross',         grossImg);
   this.load.image('background',    backgroundImg);
+  this.load.image('facultyThurm',  facultyThurm);
 
   // load spritesheets
-  this.load.spritesheet('invader', invaderImg, { frameWidth: 32, frameHeight: 32 });
   this.load.spritesheet('kaboom',  kaboomImg, { frameWidth: 128, frameHeight: 128 });
 }
 
@@ -66,19 +66,12 @@ function create() {
         HEIGHT = this.game.config.height;
 
   // create the background image
-  this.background = this.add.tileSprite(400, 300, WIDTH, HEIGHT, 'starfield');
+  this.background = this.add.tileSprite(WIDTH / 2, HEIGHT / 2, 0, 0, 'background');
 
   // create the player
-  this.player = new Player(this, 400, 500, 'ship');
+  this.player = new Player(this, WIDTH / 2, HEIGHT - 64, 'gross');
 
   // TODO: find a better place for creating animations
-  this.anims.create({
-    key: 'fly',
-    frames: this.anims.generateFrameNumbers('invader', {start: 0, end: 3}),
-    frameRate: 10,
-    repeat: -1
-  });
-
   this.anims.create({
     key: 'explode',
     frames: this.anims.generateFrameNumbers('kaboom'),
@@ -134,9 +127,6 @@ function create() {
  * Gameplay loop
  */ 
 function update(time, delta) {
-  //  Scroll the background
-  this.background.tilePositionY -= 100 / delta;
-
   // update the player
   this.player.update(time, delta);
 

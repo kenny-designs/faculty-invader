@@ -19,6 +19,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     scene.physics.world.enableBody(this, 0);
     this.setCollideWorldBounds(true);
 
+    // Set size
+    this.setDisplaySize(32, 64);
+
     // prevent movement from collisions (such as from bullets)
     this.setImmovable(true);
 
@@ -31,8 +34,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     // number of lives left for the player
     this.lives = 3;
-    this.livesText = scene.add.text(scene.game.config.width / 2, 10, 'Lives: ' + this.lives, {
-      fontSize: 32
+    this.livesText = scene.add.text(scene.game.config.width - 25, 13, 'Lives: ' + this.lives, {
+      fontSize: 32,
+      rtl: true,
+      color: '#CA0903'
     });
 
     // Add the player to the scene
@@ -52,6 +57,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    * @param xVel x velocity to move the player
    */ 
   moveLeft(xVel) {
+    // face sprite to the left
+    if (!this.flipX) this.setFlipX(true);
+
     this.setVelocityX(-xVel);
   }
 
@@ -60,6 +68,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    * @param xVel x velocity to move the player
    */ 
   moveRight(xVel) {
+    // face sprite to the right
+    if (this.flipX) this.setFlipX(false);
+
     this.setVelocityX(xVel);
   }
 
@@ -78,10 +89,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // prevent player from firing too often
     if (this.lastFire < this.FIRE_RATE) return;
 
+    // fire the bullet
     bulletPool.fireBullet(this.x,
                           this.y,
                           this.FIRE_VELOCITY,
-                          bulletPool.fireStates.PLAYER_FIRED);
+                          bulletPool.fireStates.PLAYER_FIRED,
+                          'bullet');
+
+    // reset firing timer
     this.lastFire = 0;
   }
 
@@ -91,7 +106,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   kill() {
     this.livesText.setText('Lives: ' + --this.lives);
     if(this.lives <= 0) {
-      alert('YOU DIED!');
+      console.log('YOU DIED');
     }
   }
 }

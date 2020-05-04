@@ -7,16 +7,16 @@ import Phaser from 'phaser';
 class Enemy extends Phaser.Physics.Arcade.Sprite {
   /**
    * Creates a new enemy object
-   * @param scene The scene to spawn the player in
-   * @param x The x position to spawn the player in
-   * @param y The y position to spawn the player in
-   * @param texture Texture key for the ship's sprite
+   * @param scene The scene to spawn the enemy in
+   * @param x The x position to spawn the enemy in
+   * @param y The y position to spawn the enemy in
+   * @param texture Texture key for the enemy sprite
    */ 
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
 
-    // setup animations
-    this.anims.play('fly');
+    // Enable physics
+    scene.physics.world.enableBody(this, 0);
 
     // enemy is initially alive
     this.isAlive = true;
@@ -54,7 +54,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
   constructor(scene, bulletPool) {
     super(scene.physics.world, scene, {
       classType: Enemy,
-      key: 'invader',
+      key: 'facultyThurm',
       quantity: 55,
       gridAlign: {
         width: 11,
@@ -62,7 +62,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
         cellWidth: 64,
         cellHeight: 64,
         x: 64,
-        y: 64
+        y: 128
       }
     });
 
@@ -134,7 +134,8 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     this.bulletPool.fireBullet(enemy.x,
                                enemy.y,
                                this.FIRE_VELOCITY,
-                               this.bulletPool.fireStates.ENEMY_FIRED);
+                               this.bulletPool.fireStates.ENEMY_FIRED,
+                               'enemyBullet');
 
     // reset time since enemies last fired
     this.lastFire = 0;

@@ -17,6 +17,9 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
     // disable the bullet by default
     this.disableBody(true, true);
 
+    // have collision box match texture
+    this.body.syncBounds = true;
+
     this.name = 'bullet';
 
     this.firedState;
@@ -50,6 +53,7 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
    */
   kill() {
     this.disableBody(true, true);
+    this.anims.stop();
   }
 }
 
@@ -87,11 +91,18 @@ class BulletPool extends Phaser.Physics.Arcade.Group {
    * @param yPos Y position to fire from
    * @param yVel The velocity to fire the bullet on the Y axis
    * @param state The fire state of the bullet
+   * @param texture The texture key to fire the bullet with
+   * @param anim The animation key to play when firing
    */ 
-  fireBullet(xPos, yPos, yVel, state) {
+  fireBullet(xPos, yPos, yVel, state, texture = 'bullet', anim = null) {
     // grab a bullet from the pool and fire it
     let bullet = this.get();
     if(bullet) {
+      // assign a texture/animation to the bullet
+      if(texture) bullet.setTexture(texture);
+      if(anim)    bullet.anims.play(anim);
+    
+      // enable and launch the bullet
       bullet.firedState = state;
       bullet.enableBody(true, xPos, yPos, true, true);
       bullet.setVelocityY(yVel);
