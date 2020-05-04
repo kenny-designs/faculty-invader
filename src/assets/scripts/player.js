@@ -34,8 +34,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     // number of lives left for the player
     this.lives = 3;
-    this.livesText = scene.add.text(scene.game.config.width / 2, 10, 'Lives: ' + this.lives, {
-      fontSize: 32
+    this.livesText = scene.add.text(scene.game.config.width - 25, 13, 'Lives: ' + this.lives, {
+      fontSize: 32,
+      rtl: true,
+      color: '#CA0903'
     });
 
     // Add the player to the scene
@@ -92,8 +94,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                           this.y,
                           this.FIRE_VELOCITY,
                           bulletPool.fireStates.PLAYER_FIRED,
-                          null,
-                          'snake-anim');
+                          'bullet');
 
     // reset firing timer
     this.lastFire = 0;

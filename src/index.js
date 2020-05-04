@@ -8,18 +8,14 @@ import Scoreboard from './assets/scripts/scoreboard.js';
 import BulletPool from './assets/scripts/bulletpool.js';
 
 // import image assets
-import bulletImg      from './assets/images/bullet.png';
-import snakeImg       from './assets/images/snake.png';
-import enemyBulletImg from './assets/images/enemy-bullet.png';
+import bulletImg      from './assets/images/snake.png';
+import enemyBulletImg from './assets/images/f-letter.png';
 import grossImg       from './assets/images/gross.png';
 import kaboomImg      from './assets/images/explode.png';
-import starfieldImg   from './assets/images/starfield.png';
-import backgroundImg  from './assets/images/background2.png';
-import facultyImg     from './assets/images/faculty-atlas.png';
+import backgroundImg  from './assets/images/classroom.jpg';
 
-// import json files
-import snakeJSON   from './assets/images/snake.json';
-import facultyJSON from './assets/images/faculty-atlas.json';
+// import faculty images
+import facultyThurm from './assets/images/thurm.png';
 
 // create configuration file for our game
 const config = {
@@ -54,15 +50,11 @@ function preload() {
   this.load.image('bullet',        bulletImg);
   this.load.image('enemyBullet',   enemyBulletImg);
   this.load.image('gross',         grossImg);
-  this.load.image('starfield',     starfieldImg);
   this.load.image('background',    backgroundImg);
+  this.load.image('facultyThurm',  facultyThurm);
 
   // load spritesheets
   this.load.spritesheet('kaboom',  kaboomImg, { frameWidth: 128, frameHeight: 128 });
-
-  // load texture atlas
-  this.load.atlas('snake', snakeImg, snakeJSON);
-  this.load.atlas('faculty', facultyImg, facultyJSON);
 }
 
 /**
@@ -74,10 +66,10 @@ function create() {
         HEIGHT = this.game.config.height;
 
   // create the background image
-  this.background = this.add.tileSprite(400, 300, WIDTH, HEIGHT, 'starfield');
+  this.background = this.add.tileSprite(WIDTH / 2, HEIGHT / 2, 0, 0, 'background');
 
   // create the player
-  this.player = new Player(this, 400, 500, 'gross');
+  this.player = new Player(this, WIDTH / 2, HEIGHT - 64, 'gross');
 
   // TODO: find a better place for creating animations
   this.anims.create({
@@ -85,31 +77,6 @@ function create() {
     frames: this.anims.generateFrameNumbers('kaboom'),
     frameRate: 20,
     repeat: 0
-  });
-
-  this.anims.create({
-    key: 'snake-anim',
-    frames: this.anims.generateFrameNames('snake', {
-      start: 0,
-      end: 1,
-      prefix: 'snake_',
-      suffix: '.png'
-    }),
-    frameRate: 5,
-    repeat: -1
-  });
-
-  this.anims.create({
-    key: 'thurm-anim',
-    frames: this.anims.generateFrameNames('faculty', {
-      start: 1,
-      end: 4,
-      zeroPad: 2,
-      prefix: 'prof_thurm_animation/',
-      suffix: '.png'
-    }),
-    frameRate: 5,
-    repeat: -1
   });
 
   // spawn in the scoreboard
@@ -160,9 +127,6 @@ function create() {
  * Gameplay loop
  */ 
 function update(time, delta) {
-  //  Scroll the background
-  this.background.tilePositionY -= 100 / delta;
-
   // update the player
   this.player.update(time, delta);
 

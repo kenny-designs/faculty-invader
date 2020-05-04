@@ -18,12 +18,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     // Enable physics
     scene.physics.world.enableBody(this, 0);
 
-    // setup animations
-    //this.anims.play('thurm-anim');
-
-    // Set size
-    this.setDisplaySize(32, 32);
-
     // enemy is initially alive
     this.isAlive = true;
 
@@ -60,7 +54,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
   constructor(scene, bulletPool) {
     super(scene.physics.world, scene, {
       classType: Enemy,
-      key: 'gross',
+      key: 'facultyThurm',
       quantity: 55,
       gridAlign: {
         width: 11,
@@ -68,7 +62,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
         cellWidth: 64,
         cellHeight: 64,
         x: 64,
-        y: 64
+        y: 128
       }
     });
 
