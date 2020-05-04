@@ -122,6 +122,7 @@ function create() {
           lastLives: this.player.lives
         });
       }
+
       this.enemyGroup.updateCollisionRect();
       this.enemyGroup.incrementVelocity(3);
     }
@@ -161,9 +162,14 @@ function create() {
    
   // make restart game text interactive
   this.restartText.setInteractive();
-  this.restartText.on('pointerdown', pointer => this.scene.restart());
   this.restartText.on('pointerover', pointer => this.restartText.setColor('orange'));
   this.restartText.on('pointerout',  pointer => this.restartText.setColor('#CA0903'));
+  this.restartText.on('pointerdown', pointer => {
+    this.scene.restart({
+      lastScore: 0,
+      lastLives: 3
+    });
+  });
 
   // restart text invisible by default
   this.restartText.setVisible(false);
