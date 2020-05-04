@@ -62,7 +62,7 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
         cellWidth: 64,
         cellHeight: 64,
         x: 64,
-        y: 128
+        y: 100
       }
     });
 
@@ -191,6 +191,14 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
    */ 
   get livingEnemies() {
     return this.getChildren().filter(child => child.isAlive);;
+  }
+
+  /**
+   * Speeds up the enemies
+   */
+  incrementVelocity(increase) {
+    this.curVelocity += this.curVelocity < 0 ? -increase : increase;
+    this.setVelocityX(this.curVelocity);
   }
 }
 

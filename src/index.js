@@ -123,6 +123,7 @@ function create() {
         });
       }
       this.enemyGroup.updateCollisionRect();
+      this.enemyGroup.incrementVelocity(3);
     }
   });
 
@@ -144,6 +145,11 @@ function create() {
     player.kill();
     enemy.kill();
     this.enemyGroup.updateCollisionRect();
+
+    // check if the player is dead
+    if (!player.isAlive) {
+      this.isGameOver = true;
+    }
   });
 
   // restart game text
@@ -177,8 +183,7 @@ function update(time, delta) {
   // do nothing if the game is over
   if (this.isGameOver) {
     this.restartText.setVisible(true);
-    this.player.moveStop();
-    this.enemyGroup.setVelocityX(0);
+    this.physics.pause();
     return;
   }
 
