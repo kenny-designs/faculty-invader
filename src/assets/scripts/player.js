@@ -11,8 +11,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    * @param x The x position to spawn the player in
    * @param y The y position to spawn the player in
    * @param texture Texture key for the ship's sprite
+   * @param number of lives
    */ 
-  constructor(scene, x, y, texture) {
+  constructor(scene, x, y, texture, lives = 3) {
     super(scene, x, y, texture);
 
     // Enable physics
@@ -27,13 +28,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     // setup firing properties
     this.lastFire      = 0;     // delta time since last fire
-    this.FIRE_RATE     = 500;   // how often in milliseconds to fire
+    this.FIRE_RATE     = 100;   // how often in milliseconds to fire
     this.FIRE_VELOCITY = -1000; // velocity for the bullet to move at
 
     this.name = 'player';
 
     // number of lives left for the player
-    this.lives = 3;
+    this.lives = lives;
     this.livesText = scene.add.text(scene.game.config.width - 25, 13, 'Lives:' + this.lives, {
       fontSize: 32,
       rtl: true,

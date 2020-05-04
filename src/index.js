@@ -13,7 +13,7 @@ import enemyBulletImg from './assets/images/f-letter.png';
 import grossImg       from './assets/images/gross.png';
 import kaboomImg      from './assets/images/explode.png';
 import backgroundImg  from './assets/images/classroom.jpg';
-import facultyThurm from './assets/images/thurm.png';
+import facultyThurm   from './assets/images/thurm.png';
 
 // create configuration file for our game
 const config = {
@@ -32,6 +32,7 @@ const config = {
     }
   },
   scene: {
+    init: init,
     preload: preload,
     create: create,
     update: update
@@ -39,6 +40,15 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+
+/**
+ * Scene initialization
+ */
+function init(data) {
+  // get the previous score
+  this.lastScore = typeof(data.lastScore) != 'undefined' ? data.lastScore : 0;
+  this.lastLives = typeof(data.lastLives) != 'undefined' ? data.lastLives : 3;
+}
 
 /**
  * Preload images and spritesheets into the game
@@ -70,7 +80,7 @@ function create() {
   this.background = this.add.tileSprite(WIDTH / 2, HEIGHT / 2, 0, 0, 'background');
 
   // create the player
-  this.player = new Player(this, WIDTH / 2, HEIGHT - 64, 'gross');
+  this.player = new Player(this, WIDTH / 2, HEIGHT - 64, 'gross', this.lastLives);
 
   this.anims.create({
     key: 'explode',
@@ -80,7 +90,7 @@ function create() {
   });
 
   // spawn in the scoreboard
-  this.scoreboard = new Scoreboard(this, 0, 0, 'Scoreboard');
+  this.scoreboard = new Scoreboard(this, this.lastScore);
 
   // pool of bullets shared by both the player and the enemies
   this.bulletPool = new BulletPool(this);
@@ -94,6 +104,14 @@ function create() {
       enemy.kill();
       bullet.kill();
       this.scoreboard.increaseScore(100);
+
+      // check if any enemies remain
+      if (this.enemyGroup.livingEnemies.length === 0) {
+        this.scene.restart({
+          lastScore: this.scoreboard.score,
+          lastLives: this.player.lives
+        });
+      }
       this.enemyGroup.updateCollisionRect();
     }
   });
