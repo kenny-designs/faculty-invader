@@ -54,8 +54,8 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
   constructor(scene, bulletPool) {
     super(scene.physics.world, scene, {
       classType: Enemy,
-      key: 'facultyThurm',
-      quantity: 55,
+      key: ['facultyThurm', 'facultySokol', 'facultyLangsam', 'facultyArnow', 'facultyCox'],
+      quantity: 11,
       gridAlign: {
         width: 11,
         height: 5,
