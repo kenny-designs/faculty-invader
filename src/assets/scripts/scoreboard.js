@@ -8,21 +8,17 @@ class Scoreboard extends Phaser.GameObjects.GameObject {
   /**
    * Creates a new scoreboard object
    * @param scene The scene to spawn the scoreboard in
+   * @param score to start with
    */ 
-  constructor(scene) {
+  constructor(scene, score = 0) {
     super(scene, 'scoreboard');
 
     // the player's current score
-    this.score = 0;
-    this.scoreText = scene.add.text(scene.game.config.width - 10, 10, this.score, {
+    this.score = score;
+    this.scoreText = scene.add.text(25, 13, 'SCORE ' + this.score, {
       fontSize: 32,
-      rtl: true
+      color: '#CA0903'
     });
-
-    // highscore
-    // TODO: add functionality to this
-    this.highscore = 0;
-    this.highscoreText = scene.add.text(10, 10, 'HI ' + this.score, { fontSize: 32 });
 
     // add the scoreboard to the scene
     scene.add.existing(this);
@@ -34,7 +30,7 @@ class Scoreboard extends Phaser.GameObjects.GameObject {
    */ 
   increaseScore(points) {
     this.score += points;
-    this.scoreText.setText(this.score);
+    this.scoreText.setText('SCORE ' + this.score);
   }
 }
 

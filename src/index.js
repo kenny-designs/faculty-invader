@@ -8,13 +8,18 @@ import Scoreboard from './assets/scripts/scoreboard.js';
 import BulletPool from './assets/scripts/bulletpool.js';
 
 // import image assets
-import bulletImg      from './assets/images/bullet.png';
-import enemyBulletImg from './assets/images/enemy-bullet.png';
-import invaderImg     from './assets/images/invader32x32x4.png';
-import shipImg        from './assets/images/player.png';
+import bulletImg      from './assets/images/snake.png';
+import enemyBulletImg from './assets/images/f-letter.png';
+import grossImg       from './assets/images/gross.png';
 import kaboomImg      from './assets/images/explode.png';
-import starfieldImg   from './assets/images/starfield.png';
-import backgroundImg  from './assets/images/background2.png';
+import backgroundImg  from './assets/images/classroom.jpg';
+
+// load all faculty images
+import facultyThurm     from './assets/images/thurm.png';
+import facultyArnow     from './assets/images/arnow.png';
+import facultyCox       from './assets/images/cox.png';
+import facultyLangsam   from './assets/images/langsam.png';
+import facultySokol     from './assets/images/sokol.png';
 
 // create configuration file for our game
 const config = {
@@ -29,10 +34,11 @@ const config = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: true
+      //debug: true
     }
   },
   scene: {
+    init: init,
     preload: preload,
     create: create,
     update: update
@@ -42,18 +48,30 @@ const config = {
 const game = new Phaser.Game(config);
 
 /**
+ * Scene initialization
+ */
+function init(data) {
+  // get the previous score
+  this.lastScore = typeof(data.lastScore) != 'undefined' ? data.lastScore : 0;
+  this.lastLives = typeof(data.lastLives) != 'undefined' ? data.lastLives : 3;
+}
+
+/**
  * Preload images and spritesheets into the game
  */ 
 function preload() {
   // load images
-  this.load.image('bullet',        bulletImg);
-  this.load.image('enemyBullet',   enemyBulletImg);
-  this.load.image('ship',          shipImg);
-  this.load.image('starfield',     starfieldImg);
-  this.load.image('background',    backgroundImg);
+  this.load.image('bullet',          bulletImg);
+  this.load.image('enemyBullet',     enemyBulletImg);
+  this.load.image('gross',           grossImg);
+  this.load.image('background',      backgroundImg);
+  this.load.image('facultyThurm',    facultyThurm);
+  this.load.image('facultyArnow',    facultyArnow);
+  this.load.image('facultyCox',      facultyCox);
+  this.load.image('facultyLangsam',  facultyLangsam);
+  this.load.image('facultySokol',    facultySokol);
 
   // load spritesheets
-  this.load.spritesheet('invader', invaderImg, { frameWidth: 32, frameHeight: 32 });
   this.load.spritesheet('kaboom',  kaboomImg, { frameWidth: 128, frameHeight: 128 });
 }
 
@@ -65,19 +83,14 @@ function create() {
   const WIDTH  = this.game.config.width,
         HEIGHT = this.game.config.height;
 
+  // true if the game is over
+  this.isGameOver = false;
+
   // create the background image
-  this.background = this.add.tileSprite(400, 300, WIDTH, HEIGHT, 'starfield');
+  this.background = this.add.tileSprite(WIDTH / 2, HEIGHT / 2, 0, 0, 'background');
 
   // create the player
-  this.player = new Player(this, 400, 500, 'ship');
-
-  // TODO: find a better place for creating animations
-  this.anims.create({
-    key: 'fly',
-    frames: this.anims.generateFrameNumbers('invader', {start: 0, end: 3}),
-    frameRate: 10,
-    repeat: -1
-  });
+  this.player = new Player(this, WIDTH / 2, HEIGHT - 64, 'gross', this.lastLives);
 
   this.anims.create({
     key: 'explode',
@@ -87,7 +100,7 @@ function create() {
   });
 
   // spawn in the scoreboard
-  this.scoreboard = new Scoreboard(this, 0, 0, 'Scoreboard');
+  this.scoreboard = new Scoreboard(this, this.lastScore);
 
   // pool of bullets shared by both the player and the enemies
   this.bulletPool = new BulletPool(this);
@@ -95,13 +108,23 @@ function create() {
   // group of enemies for the player to fight
   this.enemyGroup = new EnemyGroup(this, this.bulletPool);
 
-  // TODO: find a better place for this and implement type checking
   // bullet hits an enemy
   this.physics.add.overlap(this.enemyGroup, this.bulletPool, (enemy, bullet) => {
     if(bullet.firedState === this.bulletPool.fireStates.PLAYER_FIRED) {
       enemy.kill();
       bullet.kill();
       this.scoreboard.increaseScore(100);
+
+      // check if any enemies remain
+      if (this.enemyGroup.livingEnemies.length === 0) {
+        this.scene.restart({
+          lastScore: this.scoreboard.score,
+          lastLives: this.player.lives
+        });
+      }
+
+      this.enemyGroup.updateCollisionRect();
+      this.enemyGroup.incrementVelocity(3);
     }
   });
 
@@ -110,11 +133,48 @@ function create() {
     if(bullet.firedState === this.bulletPool.fireStates.ENEMY_FIRED) {
       player.kill();
       bullet.kill();
+
+      // check if the player is dead
+      if (!player.isAlive) {
+        this.isGameOver = true;
+      }
     }
   });
 
+  // enemy runs into the player
+  this.physics.add.overlap(this.player, this.enemyGroup, (player, enemy) => {
+    player.kill();
+    enemy.kill();
+    this.enemyGroup.updateCollisionRect();
+
+    // check if the player is dead
+    if (!player.isAlive) {
+      this.isGameOver = true;
+    }
+  });
+
+  // restart game text
+  this.restartText = this.add.text(WIDTH / 2 - 200, 70, 'Play Again?', {
+    fontSize: 64,
+    color: '#CA0903',
+    backgroundColor: '#FFFDD4'
+  });
+   
+  // make restart game text interactive
+  this.restartText.setInteractive();
+  this.restartText.on('pointerover', pointer => this.restartText.setColor('orange'));
+  this.restartText.on('pointerout',  pointer => this.restartText.setColor('#CA0903'));
+  this.restartText.on('pointerdown', pointer => {
+    this.scene.restart({
+      lastScore: 0,
+      lastLives: 3
+    });
+  });
+
+  // restart text invisible by default
+  this.restartText.setVisible(false);
+
   // set up keyboard input
-  // TODO: Create a input controller class to handle all this
   this.cursors = this.input.keyboard.addKeys({
     'left': Phaser.Input.Keyboard.KeyCodes.A,
     'right': Phaser.Input.Keyboard.KeyCodes.D,
@@ -126,8 +186,12 @@ function create() {
  * Gameplay loop
  */ 
 function update(time, delta) {
-  //  Scroll the background
-  this.background.tilePositionY -= 100 / delta;
+  // do nothing if the game is over
+  if (this.isGameOver) {
+    this.restartText.setVisible(true);
+    this.physics.pause();
+    return;
+  }
 
   // update the player
   this.player.update(time, delta);
@@ -135,7 +199,6 @@ function update(time, delta) {
   // update the enemy group
   this.enemyGroup.update(time, delta);
 
-  // TODO: refactor into its own function
   // control player movement
   if(this.cursors.left.isDown) {
     this.player.moveLeft(300);
