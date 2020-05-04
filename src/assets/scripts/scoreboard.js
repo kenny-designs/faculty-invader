@@ -8,12 +8,13 @@ class Scoreboard extends Phaser.GameObjects.GameObject {
   /**
    * Creates a new scoreboard object
    * @param scene The scene to spawn the scoreboard in
+   * @param score to start with
    */ 
-  constructor(scene) {
+  constructor(scene, score = 0) {
     super(scene, 'scoreboard');
 
     // the player's current score
-    this.score = 0;
+    this.score = score;
     this.scoreText = scene.add.text(25, 13, 'SCORE ' + this.score, {
       fontSize: 32,
       color: '#CA0903'
