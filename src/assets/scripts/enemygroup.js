@@ -89,13 +89,18 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     this.collisionRect.body.checkCollision.none = true;
 
     // handle worldbounds events from collisionRect hitting world bounds
-    // TODO: make it so this is only fired when collisionRect hits world bounds
     scene.physics.world.on('worldbounds', (body) => {
       // reverse group direction
       this.setVelocityX((this.curVelocity *= -1));
 
       // lower group by a level
       this.incY(32);
+
+      // faculty hit the floor, game over!
+      if(body.onFloor()) {
+        scene.isGameOver = true;
+        scene.restartText.setVisible(true);
+      }
     });
 
     // begin group movement
@@ -149,25 +154,36 @@ class EnemyGroup extends Phaser.Physics.Arcade.Group {
     if(enemies.length < 1) return;
 
     let lowX  = Number.MAX_SAFE_INTEGER,
-        highX = Number.MIN_SAFE_INTEGER;
+        highX = Number.MIN_SAFE_INTEGER,
+        highY = Number.MIN_SAFE_INTEGER,
+        lowY  = Number.MAX_SAFE_INTEGER;
 
     Phaser.Utils.Array.Each(enemies, (enemy) => {
       // offset from enemies center
-      let offset = enemy.width / 2;
+      let xoffset = enemy.width / 2,
+          yoffset = enemy.height / 2;
 
-      if(enemy.x - offset < lowX) {
-        lowX = enemy.x - offset;
+      if(enemy.x - xoffset < lowX) {
+        lowX = enemy.x - xoffset;
       }
 
-      if(enemy.x + enemy.width - offset > highX) {
-        highX = enemy.x + enemy.width - offset;
+      if(enemy.x + enemy.width - xoffset > highX) {
+        highX = enemy.x + enemy.width - xoffset;
+      }
+
+      if(enemy.y + enemy.height - yoffset > highY) {
+        highY = enemy.y + enemy.height - yoffset;
+      }
+
+      if(enemy.y - yoffset < lowY) {
+        lowY = enemy.y - yoffset;
       }
     });
 
     // set the rectangle to a new width and x position to match the group
-    this.collisionRect.setSize(highX - lowX, 100);
-    this.collisionRect.body.setSize(highX - lowX, 100);
-    this.collisionRect.setPosition(lowX, 100);
+    this.collisionRect.setSize(highX - lowX, highY - lowY);
+    this.collisionRect.body.setSize(highX - lowX, highY - lowY);
+    this.collisionRect.setPosition(lowX, lowY);
   }
 
   /**

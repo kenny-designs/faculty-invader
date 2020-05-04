@@ -34,7 +34,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     // number of lives left for the player
     this.lives = 3;
-    this.livesText = scene.add.text(scene.game.config.width - 25, 13, 'Lives: ' + this.lives, {
+    this.livesText = scene.add.text(scene.game.config.width - 25, 13, 'Lives:' + this.lives, {
       fontSize: 32,
       rtl: true,
       color: '#CA0903'
@@ -104,10 +104,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    * Kills the player
    */
   kill() {
-    this.livesText.setText('Lives: ' + --this.lives);
-    if(this.lives <= 0) {
-      console.log('YOU DIED');
-    }
+    --this.lives;
+    if (this.lives < 0) this.lives = 0;
+    this.livesText.setText('Lives: ' + this.lives);
+  }
+
+  /**
+   * Check if the player is alive.
+   * @return True if the player is still alive. False otherwise.
+   */
+  get isAlive() {
+    return this.lives > 0;
   }
 }
 

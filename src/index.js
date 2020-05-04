@@ -13,8 +13,6 @@ import enemyBulletImg from './assets/images/f-letter.png';
 import grossImg       from './assets/images/gross.png';
 import kaboomImg      from './assets/images/explode.png';
 import backgroundImg  from './assets/images/classroom.jpg';
-
-// import faculty images
 import facultyThurm from './assets/images/thurm.png';
 
 // create configuration file for our game
@@ -65,13 +63,15 @@ function create() {
   const WIDTH  = this.game.config.width,
         HEIGHT = this.game.config.height;
 
+  // true if the game is over
+  this.isGameOver = false;
+
   // create the background image
   this.background = this.add.tileSprite(WIDTH / 2, HEIGHT / 2, 0, 0, 'background');
 
   // create the player
   this.player = new Player(this, WIDTH / 2, HEIGHT - 64, 'gross');
 
-  // TODO: find a better place for creating animations
   this.anims.create({
     key: 'explode',
     frames: this.anims.generateFrameNumbers('kaboom'),
@@ -88,7 +88,6 @@ function create() {
   // group of enemies for the player to fight
   this.enemyGroup = new EnemyGroup(this, this.bulletPool);
 
-  // TODO: find a better place for this and implement type checking
   // bullet hits an enemy
   this.physics.add.overlap(this.enemyGroup, this.bulletPool, (enemy, bullet) => {
     if(bullet.firedState === this.bulletPool.fireStates.PLAYER_FIRED) {
@@ -104,6 +103,11 @@ function create() {
     if(bullet.firedState === this.bulletPool.fireStates.ENEMY_FIRED) {
       player.kill();
       bullet.kill();
+
+      // check if the player is dead
+      if (!player.isAlive) {
+        this.isGameOver = true;
+      }
     }
   });
 
@@ -114,8 +118,23 @@ function create() {
     this.enemyGroup.updateCollisionRect();
   });
 
+  // restart game text
+  this.restartText = this.add.text(WIDTH / 2 - 200, 70, 'Play Again?', {
+    fontSize: 64,
+    color: '#CA0903',
+    backgroundColor: '#FFFDD4'
+  });
+   
+  // make restart game text interactive
+  this.restartText.setInteractive();
+  this.restartText.on('pointerdown', pointer => this.scene.restart());
+  this.restartText.on('pointerover', pointer => this.restartText.setColor('orange'));
+  this.restartText.on('pointerout',  pointer => this.restartText.setColor('#CA0903'));
+
+  // restart text invisible by default
+  this.restartText.setVisible(false);
+
   // set up keyboard input
-  // TODO: Create a input controller class to handle all this
   this.cursors = this.input.keyboard.addKeys({
     'left': Phaser.Input.Keyboard.KeyCodes.A,
     'right': Phaser.Input.Keyboard.KeyCodes.D,
@@ -127,13 +146,20 @@ function create() {
  * Gameplay loop
  */ 
 function update(time, delta) {
+  // do nothing if the game is over
+  if (this.isGameOver) {
+    this.restartText.setVisible(true);
+    this.player.moveStop();
+    this.enemyGroup.setVelocityX(0);
+    return;
+  }
+
   // update the player
   this.player.update(time, delta);
 
   // update the enemy group
   this.enemyGroup.update(time, delta);
 
-  // TODO: refactor into its own function
   // control player movement
   if(this.cursors.left.isDown) {
     this.player.moveLeft(300);
