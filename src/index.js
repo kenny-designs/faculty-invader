@@ -13,7 +13,13 @@ import enemyBulletImg from './assets/images/f-letter.png';
 import grossImg       from './assets/images/gross.png';
 import kaboomImg      from './assets/images/explode.png';
 import backgroundImg  from './assets/images/classroom.jpg';
-import facultyThurm   from './assets/images/thurm.png';
+
+// load all faculty images
+import facultyThurm     from './assets/images/thurm.png';
+import facultyArnow     from './assets/images/arnow.png';
+import facultyCox       from './assets/images/cox.png';
+import facultyLangsam   from './assets/images/langsam.png';
+import facultySokol     from './assets/images/sokol.png';
 
 // create configuration file for our game
 const config = {
@@ -28,7 +34,7 @@ const config = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: true
+      //debug: true
     }
   },
   scene: {
@@ -55,11 +61,15 @@ function init(data) {
  */ 
 function preload() {
   // load images
-  this.load.image('bullet',        bulletImg);
-  this.load.image('enemyBullet',   enemyBulletImg);
-  this.load.image('gross',         grossImg);
-  this.load.image('background',    backgroundImg);
-  this.load.image('facultyThurm',  facultyThurm);
+  this.load.image('bullet',          bulletImg);
+  this.load.image('enemyBullet',     enemyBulletImg);
+  this.load.image('gross',           grossImg);
+  this.load.image('background',      backgroundImg);
+  this.load.image('facultyThurm',    facultyThurm);
+  this.load.image('facultyArnow',    facultyArnow);
+  this.load.image('facultyCox',      facultyCox);
+  this.load.image('facultyLangsam',  facultyLangsam);
+  this.load.image('facultySokol',    facultySokol);
 
   // load spritesheets
   this.load.spritesheet('kaboom',  kaboomImg, { frameWidth: 128, frameHeight: 128 });
