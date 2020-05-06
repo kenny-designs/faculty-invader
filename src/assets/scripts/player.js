@@ -25,7 +25,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     // setup firing properties
     this.lastFire      = 0;     // delta time since last fire
-    this.FIRE_RATE     = 100;   // how often in milliseconds to fire
+    this.FIRE_RATE     = 200;   // how often in milliseconds to fire
     this.FIRE_VELOCITY = -1000; // velocity for the bullet to move at
 
     this.name = 'player';
@@ -83,13 +83,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     // fire the bullet
     bulletPool.fireBullet(this.x + 8, // offset slightly for throwing animation
-                          this.y - 16,
+                          this.y - 32,
                           this.FIRE_VELOCITY,
                           bulletPool.fireStates.PLAYER_FIRED,
                           'bullet');
 
     // play attack animation
-    this.anims.play('student-attack');
+    this.anims.play('student-attack', true);
 
     // reset firing timer
     this.lastFire = 0;

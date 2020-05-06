@@ -10,7 +10,6 @@ import BulletPool from './assets/scripts/bulletpool.js';
 // import image assets
 import bulletImg      from './assets/images/snake.png';
 import enemyBulletImg from './assets/images/f-letter.png';
-import grossImg       from './assets/images/gross.png';
 import studentImg     from './assets/images/student.png';
 import kaboomImg      from './assets/images/explode.png';
 import backgroundImg  from './assets/images/classroom.jpg';
@@ -35,7 +34,7 @@ const config = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: true
+      //debug: true
     }
   },
   scene: {
@@ -64,7 +63,6 @@ function preload() {
   // load images
   this.load.image('bullet',          bulletImg);
   this.load.image('enemyBullet',     enemyBulletImg);
-  this.load.image('gross',           grossImg);
   this.load.image('background',      backgroundImg);
   this.load.image('facultyThurm',    facultyThurm);
   this.load.image('facultyArnow',    facultyArnow);
@@ -92,7 +90,7 @@ function create() {
   this.background = this.add.tileSprite(WIDTH / 2, HEIGHT / 2, 0, 0, 'background');
 
   // create the player
-  this.player = new Player(this, WIDTH / 2, HEIGHT - 64, 'student', this.lastLives);
+  this.player = new Player(this, WIDTH / 2, HEIGHT - 32, 'student', this.lastLives);
 
   // explosion animation
   this.anims.create({
@@ -106,7 +104,7 @@ function create() {
   this.anims.create({
     key: 'student-attack',
     frames: this.anims.generateFrameNumbers('student'),
-    frameRate: 20,
+    frameRate: 15,
     repeat: 0
   });
 
