@@ -20,15 +20,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     scene.physics.world.enableBody(this, 0);
     this.setCollideWorldBounds(true);
 
-    // Set size
-    this.setDisplaySize(32, 64);
-
     // prevent movement from collisions (such as from bullets)
     this.setImmovable(true);
 
     // setup firing properties
     this.lastFire      = 0;     // delta time since last fire
-    this.FIRE_RATE     = 100;   // how often in milliseconds to fire
+    this.FIRE_RATE     = 200;   // how often in milliseconds to fire
     this.FIRE_VELOCITY = -1000; // velocity for the bullet to move at
 
     this.name = 'player';
@@ -58,9 +55,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    * @param xVel x velocity to move the player
    */ 
   moveLeft(xVel) {
-    // face sprite to the left
-    if (!this.flipX) this.setFlipX(true);
-
     this.setVelocityX(-xVel);
   }
 
@@ -69,9 +63,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    * @param xVel x velocity to move the player
    */ 
   moveRight(xVel) {
-    // face sprite to the right
-    if (this.flipX) this.setFlipX(false);
-
     this.setVelocityX(xVel);
   }
 
@@ -91,11 +82,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.lastFire < this.FIRE_RATE) return;
 
     // fire the bullet
-    bulletPool.fireBullet(this.x,
-                          this.y,
+    bulletPool.fireBullet(this.x + 8, // offset slightly for throwing animation
+                          this.y - 32,
                           this.FIRE_VELOCITY,
                           bulletPool.fireStates.PLAYER_FIRED,
                           'bullet');
+
+    // play attack animation
+    this.anims.play('student-attack', true);
 
     // reset firing timer
     this.lastFire = 0;
